@@ -16,7 +16,7 @@
               v-model="searchValue"
               @input="search"
               class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-              placeholder="Recherchez dans vos annonces"
+              placeholder="Recherche non racourci"
               required
             />
           </div>
@@ -98,7 +98,7 @@
         class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
       >
         <div
-          class="w-full md:w-2/3 lg:w-3/5 p-6 bg-white rounded-md shadow-xl m-2"
+          class="w-full md:w-2/3 lg:w-2/5 p-6 bg-white rounded-md shadow-xl m-2 mt-2"
         >
           <div class="flex items-center justify-between">
             <h3
@@ -125,7 +125,7 @@
             </svg>
           </div>
           <div class="mt-4">
-            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="mt-10 grid grid-cols-1 sm:grid-cols-6 py-2">
               <div class="sm:col-span-5">
                 <div class="mt-2">
                   <label
