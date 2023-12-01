@@ -12,6 +12,7 @@
         className="w-6 h-6"
         width="20"
         height="20"
+        aria-label="Ajouter"
       >
         <path
           fillRule="evenodd"
@@ -70,8 +71,6 @@
                   <input
                     v-model="titre"
                     type="text"
-                    name="titre"
-                    id="titre"
                     autocomplete="given-name"
                     class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
                     placeholder="Nom"
@@ -86,11 +85,35 @@
                   <input
                     v-model="url"
                     type="Url"
-                    name="Url"
-                    id="Url"
                     autocomplete="off"
                     class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
                     placeholder="Url"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="sm:col-span-5">
+                <div class="mt-2">
+                  <label for="imageicon">Lien image icon</label>
+                  <input
+                    v-model="imageicon"
+                    type="url"
+                    autocomplete="off"
+                    class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
+                    placeholder="Lien image icon"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="sm:col-span-2">
+                <div class="mt-2">
+                  <label for="imageicon">Couleur-fond</label>
+                  <input
+                    v-model="imageicon"
+                    type="url"
+                    autocomplete="off"
+                    class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
+                    placeholder="Lien image icon"
                     required
                   />
                 </div>
@@ -171,12 +194,14 @@ export default {
       contacts: [],
       titre: "",
       url: "",
+      imageicon: "",
       showAlert: false,
     };
   },
   methods: {
     handleResetForm() {
       this.titre = "";
+      this.imageicon = "";
       this.url = "";
     },
 
@@ -191,6 +216,7 @@ export default {
           fields: {
             titre: this.titre,
             Url: this.url,
+            imageicon: this.imageicon,
           },
         }),
       })
