@@ -38,7 +38,7 @@
         <RouterLink
           to="/ajouterRaccourci"
           class="text-sm font-semibold leading-6 hover:underline"
-        >ajouter Raccourci
+          >ajouter Raccourci
         </RouterLink>
         <!-- <RouterLink
           to="/apropos"
@@ -119,11 +119,7 @@
         <!-- mobile menu  -->
         <div class="flex items-center justify-between">
           <a href="#" class="-m-1.5 p-1.5">
-            <img
-              class="h-20 w-auto"
-              src="@/assets/logo.svg"
-              alt="logo ImmoZero"
-            />
+            <img class="h-20 w-auto" src="@/assets/logo.png" alt="logo" />
           </a>
           <button
             type="button"
@@ -141,21 +137,6 @@
                 href="/"
                 class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
                 >Accueil</a
-              >
-              <a
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
-                >Ventes</a
-              >
-              <a
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
-                >A propos</a
-              >
-              <a
-                href="#"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
-                >Contact</a
               >
             </div>
             <RouterLink
