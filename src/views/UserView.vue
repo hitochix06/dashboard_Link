@@ -29,6 +29,7 @@
                 className="w-6 h-6"
                 width="20"
                 height="20"
+                aria-label="Ajouter"
               >
                 <path
                   fillRule="evenodd"
@@ -36,89 +37,13 @@
                   clipRule="evenodd"
                 />
               </svg>
-              <div class="uppercase">Dépose une annonce</div>
+              <div class="uppercase">Ajouter un raccourci</div>
             </button>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- creation bouton trier par date -->
-  <!-- <div class="container mx-auto flex justify-end mt-10">
-    <Menu as="div" class="relative inline-block text-left">
-      <div>
-        <MenuButton
-          class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-        >
-          Trier par date
-          <ChevronDownIcon
-            class="-mr-1 h-5 w-5 text-gray-400"
-            aria-hidden="true"
-          />
-        </MenuButton>
-      </div>
-
-      <transition
-        enter-active-class="transition ease-out duration-100"
-        enter-from-class="transform opacity-0 scale-95"
-        enter-to-class="transform opacity-100 scale-100"
-        leave-active-class="transition ease-in duration-75"
-        leave-from-class="transform opacity-100 scale-100"
-        leave-to-class="transform opacity-0 scale-95"
-      >
-        <MenuItems
-          class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-        >
-          <div class="py-1">
-            <MenuItem v-slot="{ active }">
-              <a
-                href="#"
-                :class="[
-                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                  'block px-4 py-2 text-sm',
-                ]"
-                >Account settings</a
-              >
-            </MenuItem>
-            <MenuItem v-slot="{ active }">
-              <a
-                href="#"
-                :class="[
-                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                  'block px-4 py-2 text-sm',
-                ]"
-                >Support</a
-              >
-            </MenuItem>
-            <MenuItem v-slot="{ active }">
-              <a
-                href="#"
-                :class="[
-                  active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                  'block px-4 py-2 text-sm',
-                ]"
-                >License</a
-              >
-            </MenuItem>
-            <form method="POST" action="#">
-              <MenuItem v-slot="{ active }">
-                <button
-                  type="submit"
-                  :class="[
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block w-full px-4 py-2 text-left text-sm',
-                  ]"
-                >
-                  Sign out
-                </button>
-              </MenuItem>
-            </form>
-          </div>
-        </MenuItems>
-      </transition>
-    </Menu>
-  </div> -->
 
   <!-- Creation de carte pour les annonces -->
   <div class="bg-white">
@@ -208,21 +133,21 @@
   <!-- creation formulaire de modal  -->
   <div class="container mx-auto">
     <div class="flex justify-center">
-      <form
-        @submit.prevent="handleCreationAnnonces"
+      <div
         v-show="isOpen"
         class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
       >
-        <div
-          class="w-full md:w-2/3 lg:w-3/5 p-6 bg-white rounded-md shadow-xl m-2"
+        <form
+          @submit.prevent="createContact"
+          class="w-full md:w-2/3 lg:w-2/5 p-6 bg-white rounded-md shadow-xl m-2 mt-2"
         >
           <div class="flex items-center justify-between">
-            <h3
+            <h1
               class="text-2xl"
               style="text-transform: uppercase; font-weight: 700"
             >
-              Déposer une annonce
-            </h3>
+              Ajouter un raccourci
+            </h1>
             <svg
               @click="isOpen = false"
               xmlns="http://www.w3.org/2000/svg"
@@ -240,97 +165,52 @@
               />
             </svg>
           </div>
-          <!-- 
-          <div class="mt-2">
-            <label for="image" class="block text-sm font-medium leading-6 text-gray-900">Image</label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              accept="image/*"
-              class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
-              required
-            />
-          </div> -->
-
           <div class="mt-4">
-            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <div class="sm:col-span-3">
+            <div class="mt-10 grid grid-cols-1 sm:grid-cols-6 py-2">
+              <div class="sm:col-span-5">
                 <div class="mt-2">
                   <label
-                    for="first-name"
+                    for="titre"
                     class="block text-sm font-medium leading-6 text-gray-900"
                     >Titre</label
                   >
                   <input
-                    v-model="title"
+                    v-model="titre"
                     type="text"
-                    name="first-name"
-                    id="first-name"
                     autocomplete="given-name"
                     class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
-                    placeholder="Titre"
+                    placeholder="Nom"
                     required
                   />
                 </div>
               </div>
 
-              <div class="sm:col-span-3">
+              <div class="sm:col-span-5">
                 <div class="mt-2">
-                  <label for="Price">Prix</label>
+                  <label for="Url">URL</label>
                   <input
-                    v-model="price"
-                    type="number"
-                    name="price"
-                    id="price"
+                    v-model="url"
+                    type="Url"
                     autocomplete="off"
                     class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
-                    placeholder="Prix €"
+                    placeholder="Url"
                     required
                   />
                 </div>
               </div>
-
-              <div class="sm:col-span-3">
+              <div class="sm:col-span-5">
                 <div class="mt-2">
-                  <label
-                    for="location"
-                    class="block text-sm font-medium leading-6 text-gray-900"
-                    >Emplacement</label
-                  >
+                  <label for="imageicon">Lien image icon</label>
                   <input
-                    v-model="location"
-                    id="location"
-                    name="location"
-                    type="text"
+                    v-model="imageicon"
+                    type="url"
                     autocomplete="off"
                     class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
-                    placeholder="Ville"
-                    required
+                    placeholder="Lien image icon"
                   />
-                </div>
-              </div>
-
-              <div class="sm:col-span-4">
-                <label
-                  for="description"
-                  class="block text-sm font-medium leading-6 text-gray-900"
-                  >Description</label
-                >
-                <div class="mt-2">
-                  <textarea
-                    v-model="description"
-                    id="description"
-                    name="description"
-                    autocomplete="off"
-                    class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
-                    placeholder="Description"
-                    required
-                  ></textarea>
                 </div>
               </div>
             </div>
-
             <button
               @click="isOpen = false"
               class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
@@ -344,8 +224,8 @@
               Ajouter
             </button>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -492,183 +372,115 @@
       </form>
     </div>
   </div>
+
+  <!-- cree une alerte -->
+  <transition name="slide-fade">
+    <div
+      v-show="showAlert"
+      :class="{ 'alert-hide': !showAlert }"
+      id="alert-border-3"
+      class="fixed top-0 right-0 flex items-center p-5 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800"
+      role="alert"
+    >
+      <svg
+        class="flex-shrink-0 w-4 h-4"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+        />
+      </svg>
+      <div class="ms-3 text-sm font-medium">
+        Votre compte a été créé avec succès !
+      </div>
+    </div>
+  </transition>
 </template>
 
-<script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { ChevronDownIcon } from "@heroicons/vue/20/solid";
-import { ref, onMounted } from "vue";
-import axios from "axios";
-import { useRouter } from "vue-router";
+<style scoped>
+.fondimage {
+  background-image: url("../../assets/images/fondecran.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 50vh;
+}
 
-// Router
-const router = useRouter();
+.lg\:py-16 {
+  padding-top: 1rem;
+  padding-bottom: 0rem;
+}
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+</style>
 
-// Variables
-const data = ref("");
-const isOpen = ref(false);
-const title = ref("");
-const description = ref("");
-const price = ref("");
-const location = ref("");
-const searchValue = ref("");
-const editingId = ref(null);
-const isEditing = ref(false);
+<script>
+const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
+const TABLE_NAME = "ajouterraccourci";
+const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
-const openEditForm = (item) => {
-  isEditing.value = true;
-  title.value = item.title;
-  description.value = item.description;
-  price.value = item.price;
-  location.value = item.location;
+export default {
+  data() {
+    return {
+      isOpen: false,
+      contacts: [],
+      titre: "",
+      url: "",
+      imageicon: "",
+      showAlert: false,
+    };
+  },
+  methods: {
+    handleResetForm() {
+      this.titre = "";
+      this.imageicon = "";
+      this.url = "";
+    },
 
-  // Stockez l'ID de l'annonce que nous modifions
-  editingId.value = item.id;
-};
-
-// Fonctions recherche
-const search = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.get(
-      "https://apihackaton1.osc-fr1.scalingo.io/get-my-properties",
-      {
+    createContact() {
+      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      }
-    );
-    data.value = response.data.filter(
-      (item) =>
-        item.title.includes(searchValue.value) ||
-        item.description.includes(searchValue.value) ||
-        item.location.includes(searchValue.value) ||
-        item.price.toString().includes(searchValue.value)
-    );
-  } catch (error) {
-    console.error("Erreur lors de la recherche: ", error);
-  }
-};
+        method: "POST",
+        body: JSON.stringify({
+          fields: {
+            titre: this.titre,
+            Url: this.url,
+            imageicon: this.imageicon,
+          },
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.showAlert = true; // Afficher l'alerte
+          this.isOpen = false;
+          this.handleResetForm();
 
-const handleCreationAnnonces = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.post(
-      "https://apihackaton1.osc-fr1.scalingo.io/create-properties",
-      {
-        title: title.value,
-        description: description.value,
-        price: price.value,
-        location: location.value,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    isOpen.value = false;
-    router.go();
-    alert("Annonce modifiée avec succès");
-
-    // Reset des valeurs
-    title.value = "";
-    description.value = "";
-    price.value = "";
-    location.value = "";
-  } catch (error) {
-    console.error("Erreur lors de la création de l'annonce: ", error);
-    alert("Erreur lors de l'ajout de l'annonce");
-  }
-};
-
-// Fonction modification
-const handleMotifAnnonces = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const url = editingId.value
-      ? `https://apihackaton1.osc-fr1.scalingo.io/update-properties/${editingId.value}`
-      : "https://apihackaton1.osc-fr1.scalingo.io/create-properties";
-    const method = editingId.value ? "put" : "post";
-    const response = await axios[method](
-      url,
-      {
-        title: title.value,
-        description: description.value,
-        price: price.value,
-        location: location.value,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    isEditing.value = false;
-    
-    router.go();
-
-    // Reset des valeurs
-    title.value = "";
-    description.value = "";
-    price.value = "";
-    location.value = "";
-  } catch (error) {
-    console.error("Erreur lors de la création de l'annonce: ", error);
-    alert("Erreur lors de l'ajout de l'annonce");
-  }
-};
-
-// Récupération des annonces
-onMounted(async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.get(
-      "https://apihackaton1.osc-fr1.scalingo.io/get-my-properties",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    data.value = response.data.filter(
-      (item) =>
-        item.title.includes(searchValue.value) ||
-        item.description.includes(searchValue.value) ||
-        item.location.includes(searchValue.value) ||
-        item.price.toString().includes(searchValue.value)
-    );
-    console.log(data.value);
-  } catch (error) {
-    console.error("Erreur lors de la récupération des annonces: ", error);
-  }
-});
-
-const deleteProduct = async (id) => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.delete(
-      `https://apihackaton1.osc-fr1.scalingo.io/delete-properties/${id}`, // Utilisez le bon ID ici
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    alert("Annonce supprimée avec succès");
-
-    const responseProperties = await axios.get(
-      "https://apihackaton1.osc-fr1.scalingo.io/get-my-properties",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    data.value = responseProperties.data;
-  } catch (error) {
-    console.error("Erreur lors de la suppression de l'annonce: ", error);
-    alert("Erreur lors de la suppression de l'annonce");
-  }
+          // Faire disparaître l'alerte après 5 secondes
+          setTimeout(() => {
+            this.showAlert = false;
+          }, 3000);
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Une erreur est survenue");
+        });
+    },
+  },
 };
 </script>

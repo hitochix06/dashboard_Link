@@ -35,11 +35,11 @@
           class="text-sm font-semibold leading-6 hover:underline"
           >Accueil</RouterLink
         >
-        <RouterLink
+        <!-- <RouterLink
           to="/ajouterRaccourci"
           class="text-sm font-semibold leading-6 hover:underline"
           >ajouter Raccourci
-        </RouterLink>
+        </RouterLink> -->
         <!-- <RouterLink
           to="/apropos"
           class="text-sm font-semibold leading-6 hover:underline"

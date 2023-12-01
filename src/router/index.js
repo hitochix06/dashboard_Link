@@ -20,11 +20,7 @@ const router = createRouter({
       component: () => import('../views/UserView.vue')
     },
 
-    {
-      path: '/ajouterRaccourci',
-      name: 'ajouterRaccourci',
-      component: () => import('../views/AjouterFormulaire.vue')
-    }
+
   ]
 })
 
