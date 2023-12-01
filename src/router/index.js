@@ -18,6 +18,12 @@ const router = createRouter({
       path: '/user',
       name: 'user',
       component: () => import('../views/UserView.vue')
+    },
+
+    {
+      path: '/ajouterRaccourci',
+      name: 'ajouterRaccourci',
+      component: () => import('../views/AjouterFormulaire.vue')
     }
   ]
 })
