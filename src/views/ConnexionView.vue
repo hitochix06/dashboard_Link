@@ -82,10 +82,7 @@
                 <p
                   class="mt-6 flex items-baseline justify-center gap-x-2"
                   style="color: white"
-                >
-                  Vous souhaitez passer une petite annonce immobilière de
-                  particulier à particulier et gratuitement ?
-                </p>
+                ></p>
                 <div class="mt-6 flex items-baseline justify-center gap-x-2">
                   <label for="email-address"></label>
                   <input
@@ -319,6 +316,48 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
+
+const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
+const TABLE_NAME = "Formulaire_inscription";
+const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
+
+// Data
+const contacts = ref([]);
+const nom = ref("");
+const prenom = ref("");
+const email = ref("");
+
+// Methods
+const handleResetForm = () => {
+  nom.value = "";
+  prenom.value = "";
+  email.value = "";
+};
+
+const handleSubmitForm = async () => {
+  try {
+    const response = await axios.post(
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+      {
+        fields: {
+          nom: nom.value,
+          prenom: prenom.value,
+          email: email.value,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    contacts.value.push(response.data);
+    handleResetForm();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // Router
 const router = useRouter();
