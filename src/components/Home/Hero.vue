@@ -191,10 +191,6 @@ const TABLE_NAME = "ajouterraccourci";
 const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
 
-new Vue({
-  el: '#main',
-  vuetify: new Vuetify(),   
-})
 
 // Variables
 const data = ref("");
