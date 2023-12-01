@@ -26,7 +26,7 @@
   <!-- creation formulaire de modal  -->
   <div class="container mx-auto">
     <div class="flex justify-center">
-      <form
+      <div
         v-show="isOpen"
         class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
       >
@@ -83,7 +83,7 @@
                 <div class="mt-2">
                   <label for="Url">URL</label>
                   <input
-                    v-model="URL"
+                    v-model="url"
                     type="Url"
                     name="Url"
                     id="Url"
@@ -103,7 +103,7 @@
             </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -129,6 +129,10 @@ export default {
     },
 
     createContact() {
+      if (!this.titre || !this.url) {
+        alert("Veuillez remplir tous les champs");
+        return;
+      }
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
         headers: {
           Authorization: `Bearer ${API_TOKEN}`,
@@ -145,6 +149,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.getContacts();
+          alert("Raccourci ajouté");
           this.handleResetForm();
         })
         .catch((error) => {
