@@ -334,31 +334,6 @@ const handleResetForm = () => {
   email.value = "";
 };
 
-const handleSubmitForm = async () => {
-  try {
-    const response = await axios.post(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
-      {
-        fields: {
-          nom: nom.value,
-          prenom: prenom.value,
-          email: email.value,
-        },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    contacts.value.push(response.data);
-    handleResetForm();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 // Router
 const router = useRouter();
 

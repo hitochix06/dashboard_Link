@@ -62,27 +62,16 @@
           <!-- code gere image -->
           <div
             class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-60"
-          >
-            <img
-              src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/295090917.jpg?k=d17621b71b0eaa0c7a37d8d8d02d33896cef75145f61e7d96d296d88375a7d39&o=&hp=1"
-              class="h-full w-full object-cover object-center lg:h-full lg:w-full"
-            />
-          </div>
+          ></div>
           <div class="mt-4 flex justify-between">
             <div>
               <h1 class="text-lg text-black-900 m-5">
-                {{ item.title }}
+                {{ item.nom }}
               </h1>
               <p class="mt-1 text-sm text-black-900 m-5">
-                {{ item.description }}
-              </p>
-              <p class="mt-1 text-sm m-5 uppercase text-gray-900">
-                {{ item.location }}
+                {{ item.URL }}
               </p>
             </div>
-            <p class="text-lg font-medium m-5 text-gray-900">
-              {{ item.price }}€
-            </p>
           </div>
         </div>
       </div>
@@ -134,7 +123,7 @@
                     >Nom</label
                   >
                   <input
-                    v-model="title"
+                    v-model="nom"
                     type="text"
                     name="first-name"
                     id="first-name"
@@ -150,7 +139,7 @@
                 <div class="mt-2">
                   <label for="Url">URL</label>
                   <input
-                    v-model="price"
+                    v-model="URL"
                     type="Url"
                     name="Url"
                     id="Url"
@@ -197,6 +186,16 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
+const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
+const TABLE_NAME = "ajouterraccourci";
+const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
+
+
+new Vue({
+  el: '#main',
+  vuetify: new Vuetify(),   
+})
+
 // Variables
 const data = ref("");
 const isOpen = ref(false);
@@ -204,62 +203,19 @@ const isOpen = ref(false);
 // barre de recherche
 const searchValue = ref("");
 
-// fonction de recherche
-const search = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const response = await axios.get(
-      "https://apihackaton1.osc-fr1.scalingo.io/properties",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    data.value = response.data.filter(
-      (item) =>
-        item.title.includes(searchValue.value) ||
-        item.description.includes(searchValue.value) ||
-        item.location.includes(searchValue.value) ||
-        item.price.toString().includes(searchValue.value)
-    );
-  } catch (error) {
-    console.error("Erreur lors de la recherche: ", error);
-  }
-};
-
-onMounted(async () => {
-  try {
-    const response = await axios.get(
-      "https://apihackaton1.osc-fr1.scalingo.io/properties"
-    );
-    data.value = response.data.filter(
-      (item) =>
-        item.title.includes(searchValue.value) ||
-        item.description.includes(searchValue.value) ||
-        item.location.includes(searchValue.value) ||
-        item.price.toString().includes(searchValue.value)
-    );
-    console.log(data.value);
-  } catch (error) {
-    console.error("Erreur lors de la récupération des annonces: ", error);
-  }
-});
-
+// bouton ajouter un raccourci
 const handleCreationRaccourci = async () => {
   try {
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     const response = await axios.post(
-      "https://apihackaton1.osc-fr1.scalingo.io/create-properties",
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
       {
-        title: title.value,
-        description: description.value,
-        price: price.value,
-        location: location.value,
+        nom: nom.value,
+        URL: URL.value,
       },
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${API_TOKEN}`,
         },
       }
     );
@@ -268,13 +224,46 @@ const handleCreationRaccourci = async () => {
     alert("Annonce modifiée avec succès");
 
     // Reset des valeurs
-    title.value = "";
-    description.value = "";
-    price.value = "";
-    location.value = "";
+    nom.value = "";
+    URL.value = "";
   } catch (error) {
     console.error("Erreur lors de la création de l'annonce: ", error);
     alert("Erreur lors de l'ajout de l'annonce");
   }
 };
+
+// fonction de recherche
+const search = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+      {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+      }
+    );
+    data.value = response.data.filter((item) =>
+      item.nom.includes(searchValue.value)
+    );
+  } catch (error) {
+    console.error("Erreur lors de la recherche: ", error);
+  }
+};
+
+// fonction affichage des icon  raccourci
+onMounted(async () => {
+  try {
+    const response = await axios.get(
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`
+    );
+    data.value = response.data.filter((item) =>
+      item.nom.includes(searchValue.value)
+    );
+    console.log(data.value);
+  } catch (error) {
+    console.error("Erreur lors de la récupération des annonces: ", error);
+  }
+});
 </script>
