@@ -149,6 +149,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           alert("Raccourci ajouté");
+          this.isOpen = false;
           this.handleResetForm();
         })
         .catch((error) => {
