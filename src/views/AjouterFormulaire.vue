@@ -148,12 +148,12 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          this.getContacts();
           alert("Raccourci ajouté");
           this.handleResetForm();
         })
         .catch((error) => {
           console.log(error);
+          alert("Une erreur est survenue");
         });
     },
   },
