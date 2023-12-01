@@ -82,7 +82,8 @@
                 <p
                   class="mt-6 flex items-baseline justify-center gap-x-2"
                   style="color: white"
-                ></p>
+                >Venez, créé votre carte raccourcie
+              </p>
                 <div class="mt-6 flex items-baseline justify-center gap-x-2">
                   <label for="email-address"></label>
                   <input
