@@ -30,16 +30,17 @@
         v-show="isOpen"
         class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
       >
-        <div
+        <form
+          @submit.prevent="createContact"
           class="w-full md:w-2/3 lg:w-2/5 p-6 bg-white rounded-md shadow-xl m-2 mt-2"
         >
           <div class="flex items-center justify-between">
-            <h3
+            <h1
               class="text-2xl"
               style="text-transform: uppercase; font-weight: 700"
             >
               Ajouter un raccourci
-            </h3>
+            </h1>
             <svg
               @click="isOpen = false"
               xmlns="http://www.w3.org/2000/svg"
@@ -96,13 +97,19 @@
               </div>
             </div>
             <button
-              @click="createContact"
+              @click="isOpen = false"
+              class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
               class="ml-2 text-[#fff] bg-[#43B7BE] rounded hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
             >
               Ajouter
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
@@ -174,10 +181,6 @@ export default {
     },
 
     createContact() {
-      if (!this.titre || !this.url) {
-        alert("Veuillez remplir tous les champs");
-        return;
-      }
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
         headers: {
           Authorization: `Bearer ${API_TOKEN}`,
@@ -200,7 +203,7 @@ export default {
           // Faire disparaître l'alerte après 5 secondes
           setTimeout(() => {
             this.showAlert = false;
-          }, 5000);
+          }, 3000);
         })
         .catch((error) => {
           console.log(error);
