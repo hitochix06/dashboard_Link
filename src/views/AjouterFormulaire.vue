@@ -62,7 +62,7 @@
               <div class="sm:col-span-5">
                 <div class="mt-2">
                   <label
-                    for="first-name"
+                    for="titre"
                     class="block text-sm font-medium leading-6 text-gray-900"
                     >Titre</label
                   >
@@ -73,7 +73,7 @@
                     id="titre"
                     autocomplete="given-name"
                     class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
-                    placeholder="titre"
+                    placeholder="Nom"
                     required
                   />
                 </div>
@@ -83,10 +83,10 @@
                 <div class="mt-2">
                   <label for="Url">URL</label>
                   <input
-                    v-model="url"
-                    type="url"
-                    name="url"
-                    id="url"
+                    v-model="URL"
+                    type="Url"
+                    name="Url"
+                    id="Url"
                     autocomplete="off"
                     class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
                     placeholder="Url"
@@ -128,21 +128,6 @@ export default {
       this.url = "";
     },
 
-    getContacts() {
-      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          this.contacts = data.records;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
     createContact() {
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
         headers: {
@@ -159,7 +144,6 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          alert("ajouté avec succès");
           this.getContacts();
           this.handleResetForm();
         })
