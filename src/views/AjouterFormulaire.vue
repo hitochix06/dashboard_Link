@@ -101,20 +101,6 @@
                     autocomplete="off"
                     class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
                     placeholder="Lien image icon"
-                    required
-                  />
-                </div>
-              </div>
-              <div class="sm:col-span-2">
-                <div class="mt-2">
-                  <label for="imageicon">Couleur-fond</label>
-                  <input
-                    v-model="imageicon"
-                    type="url"
-                    autocomplete="off"
-                    class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
-                    placeholder="Lien image icon"
-                    required
                   />
                 </div>
               </div>
