@@ -114,6 +114,69 @@ export default {
       this.url = "";
     },
 
+    getContacts() {
+      fetch(
+        `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?view=${VIEW_NAME}`,
+        {
+          headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.contacts = data.records;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    // Supprimer un racourci
+    deleteContact(id) {
+      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+        method: "DELETE",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.getContacts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    //mettre a jour un racourci
+    updateContact(id) {
+      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify({
+          fields: {
+            Nom: this.nom,
+            Prenom: this.prenom,
+            Email: this.email,
+          },
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.handleResetForm();
+          this.edit = false;
+          this.getContacts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    // Ajouter un contact
     createContact() {
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
         headers: {
@@ -131,6 +194,7 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
+          this.getContacts();
           this.showAlert = true; // Afficher l'alerte
           this.isOpen = false;
           this.handleResetForm();
@@ -145,6 +209,9 @@ export default {
           alert("Une erreur est survenue");
         });
     },
+  },
+  mounted() {
+    this.getContacts();
   },
 };
 </script>
