@@ -3,27 +3,19 @@
     <div>
       <h1 class="text-center">Liste</h1>
       <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Nom</th>
-            <th scope="col">Prenom</th>
-            <th scope="col">Email</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
         <tbody>
-          <tr v-for="contact in contacts" :key="contact.id">
-            <td>{{ contact.fields.Nom }}</td>
-            <td>{{ contact.fields.Prenom }}</td>
-            <td>{{ contact.fields.Email }}</td>
+          <tr v-for="data in datas" :key="data.id">
+            <td>{{ data.fields.titre }}</td>
+            <td>{{ data.fields.Url }}</td>
+
             <td>
               <button
                 class="btn btn-primary button-margin"
-                @click="handleUpdate(contact)"
+                @click="handleUpdate(data)"
               >
                 Modifier
               </button>
-              <button class="btn btn-danger" @click="deleteContact(contact.id)">
+              <button class="btn btn-danger" @click="deleteContact(data.id)">
                 Supprimer
               </button>
             </td>
@@ -35,26 +27,26 @@
 </template>
 <script>
 const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
-const TABLE_NAME = "Leads";
+const TABLE_NAME = "ajouterraccourci";
 const VIEW_NAME = "Grid view";
 const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
 export default {
   data() {
     return {
-      contacts: [],
-      nom: "",
-      prenom: "",
-      email: "",
-      selectedId: null,
-      edit: false,
+      datas: [],
+      titre: "",
+      url: "",
+      imageicon: "",
     };
   },
   methods: {
     handleResetForm() {
-      this.nom = "";
-      this.prenom = "";
-      this.email = "";
+      this.titre = "";
+      this.url = "";
+      this.imageicon = "";
+      this.edit = false;
+      this.selectedId = null;
     },
     getContacts() {
       fetch(
@@ -67,7 +59,7 @@ export default {
       )
         .then((response) => response.json())
         .then((data) => {
-          this.contacts = data.records;
+          this.datas = data.records;
         })
         .catch((error) => {
           console.log(error);
