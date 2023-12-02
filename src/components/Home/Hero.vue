@@ -3,13 +3,10 @@
     <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
       <div class="md:flex">
         <div class="w-full p-10">
-          <h1
-            class="text-3xl font-semibold text-white dark:text-white uppercase text-center py-5"
-          ></h1>
-
           <div
             class="relative z-0 shadow-xl bg-white overflow-hidden rounded-lg"
           >
+            <!-- Liaison v-model pour la valeur de recherche et gestionnaire d'événements pour la recherche -->
             <input
               type="search"
               id="search"
@@ -20,9 +17,10 @@
               required
             />
           </div>
+          <!-- Bouton de navigation avec gestionnaire d'événements pour la redirection -->
           <div class="container mx-auto flex justify-center mt-10">
             <button
-              @click="$router.push('/connexion')"
+              @click="navigateToConnection"
               type="button"
               class="text-white bg-[#43B7BE] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55 me-2 mb-2"
             >
@@ -30,15 +28,17 @@
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="w-6 h-6"
+                class="w-6 h-6"
                 width="20"
                 height="20"
                 aria-label="Ajouter"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z"
-                  clipRule="evenodd"
+                  d="M12 3v18m9-9H3"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
                 />
               </svg>
               <div class="uppercase">Ajouter un raccourci</div>
@@ -49,28 +49,31 @@
     </div>
   </div>
 
-  <!-- Creation de carte pour les annonces -->
-  <div class="bg-white">
+  <!-- Affichage des raccourcis -->
+  <div class="bg-white" v-if="datas.length">
     <div
       class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
     >
       <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
+        <!-- Boucle sur les raccourcis -->
         <div
-          v-for="item in data"
-          :key="item.id"
+          v-for="data in datas"
+          :key="datas.id"
           class="group relative shadow-xl bg-white overflow-hidden rounded-lg"
         >
-          <!-- code gere image -->
+          <!-- Emplacement pour l'image du raccourci -->
           <div
             class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-60"
-          ></div>
+          >
+            <!-- Image ici si nécessaire -->
+          </div>
           <div class="mt-4 flex justify-between">
             <div>
               <h1 class="text-lg text-black-900 m-5">
-                {{ item.nom }}
+                {{ datas.nom }}
               </h1>
               <p class="mt-1 text-sm text-black-900 m-5">
-                {{ item.URL }}
+                {{ datas.URL }}
               </p>
             </div>
           </div>
@@ -78,29 +81,26 @@
       </div>
     </div>
   </div>
-</template>
 
-<style scoped>
-.fondimage {
-  background-image: url("../../assets/images/fondecran.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  height: 50vh;
-}
-</style>
+  <!-- Message si aucune donnée n'est trouvée ou en cours de chargement -->
+  <div v-if="isLoading" class="text-center">Chargement des données...</div>
+  <div v-if="!isLoading && !datas.length" class="text-center">
+    Aucun raccourci trouvé.
+  </div>
+</template>
 
 <script>
 const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
-const TABLE_NAME = "ajouterraccourci";
+const TABLE_NAME = "Ajouterraccourci";
+const VIEW_NAME = "Raccourcis ";
 const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
 export default {
   data() {
     return {
       isOpen: false,
-      contacts: [],
+      datas: [], // Liste des raccourcis
+      searchValue: "", // Valeur de recherche
       titre: "",
       url: "",
       imageicon: "",
@@ -108,44 +108,29 @@ export default {
     };
   },
   methods: {
-    handleResetForm() {
-      this.titre = "";
-      this.imageicon = "";
-      this.url = "";
+    navigateToConnection() {
+      // Redirection vers la page de connexion
+      this.$router.push("/connexion");
+      this.getContacts();
     },
-
-    // Ajouter un contact
-    createContact() {
-      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
+  },
+  // Méthode de recherche
+  getContacts() {
+    fetch(
+      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?view=${VIEW_NAME}`,
+      {
         headers: {
           Authorization: `Bearer ${API_TOKEN}`,
-          "Content-Type": "application/json",
         },
-        method: "POST",
-        body: JSON.stringify({
-          fields: {
-            titre: this.titre,
-            Url: this.url,
-            imageicon: this.imageicon,
-          },
-        }),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        this.datas = data.records;
       })
-        .then((response) => response.json())
-        .then((data) => {
-          this.showAlert = true; // Afficher l'alerte
-          this.isOpen = false;
-          this.handleResetForm();
-
-          // Faire disparaître l'alerte après 5 secondes
-          setTimeout(() => {
-            this.showAlert = false;
-          }, 3000);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Une erreur est survenue");
-        });
-    },
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>
