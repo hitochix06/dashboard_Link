@@ -450,6 +450,50 @@ export default {
       this.url = "";
     },
 
+    // Supprimer un racourci
+    deleteContact(id) {
+      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+        method: "DELETE",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.getContacts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    //mettre a jour un racourci
+    updateContact(id) {
+      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify({
+          fields: {
+            Nom: this.nom,
+            Prenom: this.prenom,
+            Email: this.email,
+          },
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.handleResetForm();
+          this.edit = false;
+          this.getContacts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     createContact() {
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
         headers: {
