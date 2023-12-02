@@ -55,26 +55,18 @@
       class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
     >
       <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
-        <!-- Boucle sur les raccourcis -->
-        <div
-          v-for="data in datas"
-          :key="datas.id"
-          class="group relative shadow-xl bg-white overflow-hidden rounded-lg"
-        >
-          <!-- Emplacement pour l'image du raccourci -->
+        <!-- Correction : Utilisation de 'data' au lieu de 'datas' dans la boucle v-for -->
+        <div v-for="data in datas" :key="data.id">
           <div
             class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-60"
           >
-            <!-- Image ici si nécessaire -->
+            <!-- Emplacement pour l'image du raccourci -->
           </div>
           <div class="mt-4 flex justify-between">
             <div>
-              <h1 class="text-lg text-black-900 m-5">
-                {{ datas.nom }}
-              </h1>
-              <p class="mt-1 text-sm text-black-900 m-5">
-                {{ datas.URL }}
-              </p>
+              <!-- Correction : Utilisation de 'data' au lieu de 'datas' pour accéder aux propriétés de l'élément -->
+              <h1 class="text-lg text-black-900 m-5">{{ data.nom }}</h1>
+              <p class="mt-1 text-sm text-black-900 m-5">{{ data.URL }}</p>
             </div>
           </div>
         </div>
@@ -91,46 +83,53 @@
 
 <script>
 const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
-const TABLE_NAME = "Ajouterraccourci";
-const VIEW_NAME = "Raccourcis ";
+const TABLE_NAME = "ajouterraccourci";
+const VIEW_NAME = "Grid view";
 const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
 export default {
   data() {
     return {
-      isOpen: false,
       datas: [], // Liste des raccourcis
       searchValue: "", // Valeur de recherche
       titre: "",
       url: "",
       imageicon: "",
-      showAlert: false,
+
+      isLoading: false, // Ajout de l'état de chargement
     };
+  },
+  mounted() {
+    // Déplacement de l'appel de getContacts ici pour charger les données au montage
+    this.getContacts();
   },
   methods: {
     navigateToConnection() {
       // Redirection vers la page de connexion
       this.$router.push("/connexion");
-      this.getContacts();
+      // Suppression de l'appel à getContacts ici
     },
-  },
-  // Méthode de recherche
-  getContacts() {
-    fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?view=${VIEW_NAME}`,
-      {
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        this.datas = data.records;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // Méthode de récupération des contacts
+    getContacts() {
+      this.isLoading = true; // Commencer le chargement
+      fetch(
+        `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?view=${VIEW_NAME}`,
+        {
+          headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          this.datas = data.records;
+          this.isLoading = false; // Fin du chargement
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false; // Fin du chargement même en cas d'erreur
+        });
+    },
   },
 };
 </script>
