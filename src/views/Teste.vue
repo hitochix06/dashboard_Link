@@ -70,7 +70,7 @@
                   role="menuitem"
                   @click.prevent="updateContact(item.id)"
                 >
-                  Modifier
+                  Modifier le raccourci
                 </a>
                 <a
                   href="#"
@@ -88,6 +88,7 @@
           </div>
         </div>
 
+        <!-- Titre -->
         <div>
           <h1
             class="text-sm text-black-900 m-2 text-center font-bold uppercase"
