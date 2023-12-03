@@ -65,11 +65,14 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.items = data.records;
+          this.isLoading = false; // Fin du chargement
         })
         .catch((error) => {
           console.log(error);
+          this.isLoading = false; // Fin du chargement même en cas d'erreur
         });
     },
+
     deleteContact(id) {
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
         headers: {
@@ -94,9 +97,9 @@ export default {
         method: "PATCH",
         body: JSON.stringify({
           fields: {
-            Nom: this.nom,
-            Prenom: this.prenom,
-            Email: this.email,
+            Titre: this.titre,
+            Url: this.url,
+            Imageicon: this.imageicon,
           },
         }),
       })
@@ -111,35 +114,11 @@ export default {
         });
     },
     handleUpdate(contact) {
-      this.nom = contact.fields.Nom;
-      this.prenom = contact.fields.Prenom;
-      this.email = contact.fields.Email;
+      this.titre = contact.fields.Titre;
+      this.url = contact.fields.Url;
+      this.imageicon = contact.fields.Imageicon;
       this.selectedId = contact.id;
       this.edit = true;
-    },
-    createContact() {
-      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          fields: {
-            Nom: this.nom,
-            Prenom: this.prenom,
-            Email: this.email,
-          },
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          this.getContacts();
-          this.handleResetForm();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     },
   },
 
@@ -148,8 +127,3 @@ export default {
   },
 };
 </script>
-<style>
-.button-margin {
-  margin-right: 10px;
-}
-</style>
