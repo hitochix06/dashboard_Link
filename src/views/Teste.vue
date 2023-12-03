@@ -1,28 +1,32 @@
 <template>
-  <div class="container">
-    <div>
-      <h1 class="text-center">Liste</h1>
-      <table class="table">
-        <tbody>
-          <tr v-for="item in items" :key="item.id">
-            <td>{{ item.fields.titre }}</td>
-            <td>{{ item.fields.Url }}</td>
+  <!-- Affichage des raccourcis -->
 
-            <td>
-              <button
-                class="btn btn-primary button-margin"
-                @click="handleUpdate(item)"
-              >
-                Modifier
-              </button>
-              <button class="btn btn-danger" @click="deleteContact(item.id)">
-                Supprimer
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div
+    class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+  >
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
+      <!-- Correction : Utilisation de 'data' au lieu de 'datas' dans la boucle v-for -->
+      <div v-for="item in items" :key="item.id">
+        <div
+          class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-60"
+        >
+          <!-- Emplacement pour l'image du raccourci -->
+        </div>
+        <div class="mt-4 flex justify-between">
+          <div>
+            <!-- Correction : Utilisation de 'data' au lieu de 'datas' pour accéder aux propriétés de l'élément -->
+            <h1 class="text-lg text-black-900 m-5">{{ item.fields.titre }}</h1>
+            <p class="mt-1 text-sm text-black-900 m-5">{{ item.fields.Url }}</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Message si aucune donnée n'est trouvée ou en cours de chargement -->
+  <div v-if="isLoading" class="text-center">Chargement des données...</div>
+  <div v-if="!isLoading && !items.length" class="text-center">
+    Aucun raccourci trouvé.
   </div>
 </template>
 <script>
@@ -40,6 +44,7 @@ export default {
       titre: "",
       url: "",
       imageicon: "",
+      isLoading: false, // Ajout de l'état de chargement
     };
   },
   methods: {
@@ -51,6 +56,7 @@ export default {
       this.selectedId = null;
     },
     getContacts() {
+      this.isLoading = true; // Commencer le chargement
       fetch(`${BASE_URL}?view=${VIEW_NAME}`, {
         headers: {
           Authorization: `Bearer ${API_TOKEN}`,
