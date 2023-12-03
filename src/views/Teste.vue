@@ -1,29 +1,93 @@
 <template>
-  <!-- Affichage des raccourcis -->
   <div
     class="mx-auto max-w-xs px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
   >
     <div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-x-6 gap-y-10">
-      <a
+      <div
         v-for="item in items"
         :key="item.id"
-        :href="item.fields.Url"
-        target="_blank"
         class="flex flex-col items-center hover:bg-gray-100 transition-colors duration-200 p-5 rounded-lg w-64"
       >
-        <div class="rounded-full w-16 h-16 overflow-hidden">
-          <img
-            v-if="item.fields.imageicon"
-            :src="item.fields.imageicon"
-            alt="Icon"
-            class="object-full w-full h-full rounded-full"
-          />
-          <div
-            v-else
-            :style="{ backgroundColor: getRandomColor() }"
-            class="object-full w-full h-full rounded-full"
-          ></div>
+        <!-- Conteneur pour l'image et l'icône -->
+        <div class="flex items-center">
+          <div class="rounded-full w-16 h-16 overflow-hidden">
+            <img
+              v-if="item.fields.imageicon"
+              :src="item.fields.imageicon"
+              alt="Icon"
+              class="object-full w-full h-full rounded-full"
+            />
+            <div
+              v-else
+              :style="{ backgroundColor: getRandomColor() }"
+              class="object-full w-full h-full rounded-full"
+            ></div>
+          </div>
+
+          <!-- Icône avec options -->
+          <div class="relative inline-block text-left ml-4">
+            <div>
+              <button
+                type="button"
+                class="flex items-center justify-center w-12 h-12 rounded-full focus:outline-none"
+                id="options-menu"
+                @click="toggleMenu(item.id)"
+                aria-haspopup="true"
+                :aria-expanded="open[item.id]"
+              >
+                <!-- Icone avec trois points -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="h-6 w-6 text-gray-500"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Menu déroulant -->
+            <div
+              v-show="open[item.id]"
+              class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+            >
+              <div
+                class="py-1"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="options-menu"
+              >
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  @click.prevent="updateContact(item.id)"
+                >
+                  Modifier
+                </a>
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  @click.prevent="
+                    deleteContact(item.id);
+                    open[item.id] = false;
+                  "
+                >
+                  Supprimer
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div>
           <h1
             class="text-sm text-black-900 m-2 text-center font-bold uppercase"
@@ -31,7 +95,7 @@
             {{ item.fields.titre }}
           </h1>
         </div>
-      </a>
+      </div>
     </div>
   </div>
 </template>
@@ -55,6 +119,7 @@ export default {
       imageicon: "",
       isLoading: false, // Ajout de l'état de chargement
       showAlert: false,
+      open: [],
     };
   },
   methods: {
@@ -71,6 +136,9 @@ export default {
       this.titre = "";
       this.imageicon = "";
       this.url = "";
+    },
+    toggleMenu(id) {
+      this.open = { [id]: true };
     },
 
     createContact() {
@@ -134,6 +202,7 @@ export default {
         .then((response) => response.json())
         .then((data) => {
           this.getContacts();
+          this.open[id] = false;
         })
         .catch((error) => {
           console.log(error);
