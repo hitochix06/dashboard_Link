@@ -16,12 +16,12 @@
             v-if="item.fields.imageicon"
             :src="item.fields.imageicon"
             alt="Icon"
-            class="object-cover w-full h-full rounded-full"
+            class="object-contain w-full h-full rounded-full"
           />
           <div
             v-else
             :style="{ backgroundColor: getRandomColor() }"
-            class="object-cover w-full h-full rounded-full"
+            class="object-contain w-full h-full rounded-full"
           ></div>
         </div>
         <div>
@@ -35,9 +35,7 @@
     </div>
   </div>
 </template>
-<style scoped>
-/* Ajoutez ces styles pour rendre le cadre rond et petit */
-</style>
+<style scoped></style>
 
 <script>
 const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
