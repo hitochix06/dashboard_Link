@@ -42,18 +42,17 @@
               >
                 <!-- Icone avec trois points -->
                 <svg
+                  width="16px"
+                  height="16px"
+                  viewBox="0 0 16 16"
+                  class="bi bi-three-dots-vertical"
+                  fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  class="h-6 w-6 text-gray-500"
                 >
                   <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  ></path>
+                    fill-rule="evenodd"
+                    d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"
+                  />
                 </svg>
               </button>
             </div>
