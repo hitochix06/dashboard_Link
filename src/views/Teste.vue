@@ -31,6 +31,8 @@ const TABLE_NAME = "ajouterraccourci";
 const VIEW_NAME = "Grid view";
 const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
+const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
+
 export default {
   data() {
     return {
@@ -49,14 +51,11 @@ export default {
       this.selectedId = null;
     },
     getContacts() {
-      fetch(
-        `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?view=${VIEW_NAME}`,
-        {
-          headers: {
-            Authorization: `Bearer ${API_TOKEN}`,
-          },
-        }
-      )
+      fetch(`${BASE_URL}?view=${VIEW_NAME}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
           this.items = data.records;
