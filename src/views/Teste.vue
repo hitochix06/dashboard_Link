@@ -1,22 +1,38 @@
 <template>
   <!-- Affichage des raccourcis -->
-
   <div
     class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
   >
     <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
-      <!-- Correction : Utilisation de 'data' au lieu de 'datas' dans la boucle v-for -->
       <div v-for="item in items" :key="item.id">
         <div
-          class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-60"
+          class="aspect-h-1 aspect-w-1 w-full overflow-hidden lg:aspect-none lg:h-60 flex justify-center items-center"
         >
-          <!-- Emplacement pour l'image du raccourci -->
+          <!-- Image du raccourci -->
+          <div
+            v-if="item.fields.imageicon"
+            class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md lg:aspect-none lg:h-60 flex justify-center items-center"
+          >
+            <img
+              :src="item.fields.imageicon"
+              alt="Image"
+              class="object-cover object-center rounded-full"
+            />
+          </div>
+          <div
+            v-else
+            :style="{ backgroundColor: getRandomColor() }"
+            class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md lg:aspect-none lg:h-60 flex justify-center items-center rounded-full"
+          ></div>
         </div>
         <div class="mt-4 flex justify-between">
           <div>
-            <!-- Correction : Utilisation de 'data' au lieu de 'datas' pour accéder aux propriétés de l'élément -->
-            <h1 class="text-lg text-black-900 m-5">{{ item.fields.titre }}</h1>
-            <p class="mt-1 text-sm text-black-900 m-5">{{ item.fields.Url }}</p>
+            <h1 class="text-lg text-black-900 m-5 text-center">
+              {{ item.fields.titre }}
+            </h1>
+            <p class="mt-1 text-sm text-black-900 m-5 text-center">
+              {{ item.fields.Url }}
+            </p>
           </div>
         </div>
       </div>
@@ -29,6 +45,21 @@
     Aucun raccourci trouvé.
   </div>
 </template>
+
+<style scoped>
+/* Ajoutez ces styles pour rendre le cadre rond et petit */
+.rounded-md {
+  border-radius: 100%;
+
+  width: 100px;
+  height: 100px;
+}
+
+.text-center {
+  text-align: center;
+}
+</style>
+
 <script>
 const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
 const TABLE_NAME = "ajouterraccourci";
@@ -48,6 +79,15 @@ export default {
     };
   },
   methods: {
+    getRandomColor() {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    },
+
     handleResetForm() {
       this.titre = "";
       this.url = "";
