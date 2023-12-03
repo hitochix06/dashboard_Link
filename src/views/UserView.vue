@@ -45,88 +45,39 @@
     </div>
   </div>
 
-  <!-- Creation de carte pour les annonces -->
-  <div class="bg-white">
-    <div
-      class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
-    >
-      <h2 class="text-2xl font-bold tracking-tight text-gray-900">
-        Annonces récentes
-      </h2>
-
-      <!-- Création de la carte -->
-      <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
-        <div
-          v-for="item in data"
-          :key="item.id"
-          class="group relative shadow-xl bg-white overflow-hidden rounded-lg"
-        >
-          <!-- code gere image -->
+  <!-- Affichage des raccourcis -->
+  <div
+    class="mx-auto max-w-xs px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+  >
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-x-6 gap-y-10">
+      <a
+        v-for="item in items"
+        :key="item.id"
+        :href="item.fields.Url"
+        target="_blank"
+        class="flex flex-col items-center hover:bg-gray-100 transition-colors duration-200 p-5 rounded-lg w-64"
+      >
+        <div class="rounded-full w-16 h-16 overflow-hidden">
+          <img
+            v-if="item.fields.imageicon"
+            :src="item.fields.imageicon"
+            alt="Icon"
+            class="object-cover w-full h-full rounded-full"
+          />
           <div
-            class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-60"
-          >
-            <img
-              src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/295090917.jpg?k=d17621b71b0eaa0c7a37d8d8d02d33896cef75145f61e7d96d296d88375a7d39&o=&hp=1"
-              class="h-full w-full object-cover object-center lg:h-full lg:w-full"
-            />
-          </div>
-          <button
-            @click="openEditForm(item)"
-            class="absolute top-0 p-2 left-0 text-gray-400 hover:text-green-500"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-8 h-8"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"
-              />
-            </svg>
-          </button>
-          <div class="mt-4 flex justify-between">
-            <div>
-              <h1 class="text-lg text-black-900 m-5">
-                {{ item.title }}
-              </h1>
-              <p class="mt-1 text-sm text-black-900 m-5">
-                {{ item.description }}
-              </p>
-              <p class="mt-1 text-sm text-black-900 m-5">
-                {{ item.location }}
-              </p>
-            </div>
-            <p class="text-lg font-medium m-5 text-gray-900">
-              {{ item.price }}€
-            </p>
-
-            <!-- 
-               Création du bouton supprimer -->
-            <button
-              @click="deleteProduct(item.id)"
-              class="absolute top-0 right-0 p-2 text-gray-400 hover:text-red-500"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-8 h-8"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
+            v-else
+            :style="{ backgroundColor: getRandomColor() }"
+            class="object-cover w-full h-full rounded-full"
+          ></div>
         </div>
-      </div>
+        <div>
+          <h1
+            class="text-sm text-black-900 m-2 text-center font-bold uppercase"
+          >
+            {{ item.fields.titre }}
+          </h1>
+        </div>
+      </a>
     </div>
   </div>
 
@@ -430,6 +381,7 @@
 <script>
 const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
 const TABLE_NAME = "ajouterraccourci";
+const VIEW_NAME = "Grid view";
 const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
 const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
@@ -438,14 +390,24 @@ export default {
   data() {
     return {
       isOpen: false,
-      contacts: [],
+      items: [],
       titre: "",
       url: "",
       imageicon: "",
+      isLoading: false, // Ajout de l'état de chargement
       showAlert: false,
     };
   },
   methods: {
+    getRandomColor() {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    },
+
     handleResetForm() {
       this.titre = "";
       this.imageicon = "";
@@ -484,7 +446,25 @@ export default {
         });
     },
 
-    // Supprimer un racourci
+    // Méthode pour ajouter un nouveau contact
+    getContacts() {
+      this.isLoading = true; // Commencer le chargement
+      fetch(`${BASE_URL}?view=${VIEW_NAME}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.items = data.records;
+          this.isLoading = false; // Fin du chargement
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoading = false; // Fin du chargement même en cas d'erreur
+        });
+    },
+
     deleteContact(id) {
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
         headers: {
@@ -500,8 +480,6 @@ export default {
           console.log(error);
         });
     },
-
-    //mettre a jour un racourci
     updateContact(id) {
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
         headers: {
@@ -511,9 +489,9 @@ export default {
         method: "PATCH",
         body: JSON.stringify({
           fields: {
-            Nom: this.nom,
-            Prenom: this.prenom,
-            Email: this.email,
+            Titre: this.titre,
+            Url: this.url,
+            Imageicon: this.imageicon,
           },
         }),
       })
@@ -527,6 +505,17 @@ export default {
           console.log(error);
         });
     },
+    handleUpdate(contact) {
+      this.titre = contact.fields.Titre;
+      this.url = contact.fields.Url;
+      this.imageicon = contact.fields.Imageicon;
+      this.selectedId = contact.id;
+      this.edit = true;
+    },
+  },
+
+  mounted() {
+    this.getContacts();
   },
 };
 </script>

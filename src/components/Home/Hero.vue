@@ -36,36 +36,44 @@
   </div>
 
   <!-- Affichage des raccourcis -->
-  <div class="bg-white" v-if="datas.length">
-    <div
-      class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
-    >
-      <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
-        <!-- Correction : Utilisation de 'data' au lieu de 'datas' dans la boucle v-for -->
-        <div v-for="data in datas" :key="data.id">
+  <div
+    class="mx-auto max-w-xs px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+  >
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-x-6 gap-y-10">
+      <a
+        v-for="item in items"
+        :key="item.id"
+        :href="item.fields.Url"
+        target="_blank"
+        class="flex flex-col items-center hover:bg-gray-100 transition-colors duration-200 p-5 rounded-lg w-64"
+      >
+        <div class="rounded-full w-16 h-16 overflow-hidden">
+          <img
+            v-if="item.fields.imageicon"
+            :src="item.fields.imageicon"
+            alt="Icon"
+            class="object-cover w-full h-full rounded-full"
+          />
           <div
-            class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-60"
-          >
-            <!-- Emplacement pour l'image du raccourci -->
-          </div>
-          <div class="mt-4 flex justify-between">
-            <div>
-              <!-- Correction : Utilisation de 'data' au lieu de 'datas' pour accéder aux propriétés de l'élément -->
-              <h1 class="text-lg text-black-900 m-5">{{ data.nom }}</h1>
-              <p class="mt-1 text-sm text-black-900 m-5">{{ data.URL }}</p>
-            </div>
-          </div>
+            v-else
+            :style="{ backgroundColor: getRandomColor() }"
+            class="object-cover w-full h-full rounded-full"
+          ></div>
         </div>
-      </div>
+        <div>
+          <h1
+            class="text-sm text-black-900 m-2 text-center font-bold uppercase"
+          >
+            {{ item.fields.titre }}
+          </h1>
+        </div>
+      </a>
     </div>
   </div>
-
-  <!-- Message si aucune donnée n'est trouvée ou en cours de chargement -->
-  <div v-if="isLoading" class="text-center">Chargement des données...</div>
-  <div v-if="!isLoading && !datas.length" class="text-center">
-    Aucun raccourci trouvé.
-  </div>
 </template>
+<style scoped>
+/* Ajoutez ces styles pour rendre le cadre rond et petit */
+</style>
 
 <script>
 const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
@@ -73,42 +81,51 @@ const TABLE_NAME = "ajouterraccourci";
 const VIEW_NAME = "Grid view";
 const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
+const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
+
 export default {
   data() {
     return {
-      datas: [], // Liste des raccourcis
-      searchValue: "", // Valeur de recherche
+      items: [],
       titre: "",
       url: "",
       imageicon: "",
-
       isLoading: false, // Ajout de l'état de chargement
     };
   },
-  mounted() {
-    // Déplacement de l'appel de getContacts ici pour charger les données au montage
-    this.getContacts();
-  },
   methods: {
-    navigateToConnection() {
-      // Redirection vers la page de connexion
-      this.$router.push("/connexion");
-      // Suppression de l'appel à getContacts ici
+    getRandomColor() {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
     },
-    // Méthode de récupération des contacts
+
+    handleResetForm() {
+      this.titre = "";
+      this.url = "";
+      this.imageicon = "";
+      this.edit = false;
+      this.selectedId = null;
+    },
+
+
+
+
+    
+    // Méthode pour ajouter un nouveau contact
     getContacts() {
       this.isLoading = true; // Commencer le chargement
-      fetch(
-        `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}?view=${VIEW_NAME}`,
-        {
-          headers: {
-            Authorization: `Bearer ${API_TOKEN}`,
-          },
-        }
-      )
+      fetch(`${BASE_URL}?view=${VIEW_NAME}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+      })
         .then((response) => response.json())
         .then((data) => {
-          this.datas = data.records;
+          this.items = data.records;
           this.isLoading = false; // Fin du chargement
         })
         .catch((error) => {
@@ -116,6 +133,58 @@ export default {
           this.isLoading = false; // Fin du chargement même en cas d'erreur
         });
     },
+
+    deleteContact(id) {
+      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+        method: "DELETE",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.getContacts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    updateContact(id) {
+      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify({
+          fields: {
+            Titre: this.titre,
+            Url: this.url,
+            Imageicon: this.imageicon,
+          },
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.handleResetForm();
+          this.edit = false;
+          this.getContacts();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    handleUpdate(contact) {
+      this.titre = contact.fields.Titre;
+      this.url = contact.fields.Url;
+      this.imageicon = contact.fields.Imageicon;
+      this.selectedId = contact.id;
+      this.edit = true;
+    },
+  },
+
+  mounted() {
+    this.getContacts();
   },
 };
 </script>

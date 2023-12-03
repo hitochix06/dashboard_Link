@@ -25,7 +25,9 @@
           ></div>
         </div>
         <div>
-          <h1 class="text-sm text-black-900 m-2 text-center font-bold uppercase">
+          <h1
+            class="text-sm text-black-900 m-2 text-center font-bold uppercase"
+          >
             {{ item.fields.titre }}
           </h1>
         </div>
@@ -35,16 +37,6 @@
 </template>
 <style scoped>
 /* Ajoutez ces styles pour rendre le cadre rond et petit */
-.rounded-md {
-  border-radius: 100%;
-
-  width: 100px;
-  height: 100px;
-}
-
-.text-center {
-  text-align: center;
-}
 </style>
 
 <script>
@@ -58,11 +50,13 @@ const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
 export default {
   data() {
     return {
+      isOpen: false,
       items: [],
       titre: "",
       url: "",
       imageicon: "",
       isLoading: false, // Ajout de l'état de chargement
+      showAlert: false,
     };
   },
   methods: {
@@ -77,11 +71,43 @@ export default {
 
     handleResetForm() {
       this.titre = "";
-      this.url = "";
       this.imageicon = "";
-      this.edit = false;
-      this.selectedId = null;
+      this.url = "";
     },
+
+    createContact() {
+      fetch(`${BASE_URL}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          fields: {
+            titre: this.titre,
+            Url: this.url,
+            imageicon: this.imageicon,
+          },
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.showAlert = true; // Afficher l'alerte
+          this.isOpen = false;
+          this.handleResetForm();
+
+          // Faire disparaître l'alerte après 5 secondes
+          setTimeout(() => {
+            this.showAlert = false;
+          }, 3000);
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Une erreur est survenue");
+        });
+    },
+
+    // Méthode pour ajouter un nouveau contact
     getContacts() {
       this.isLoading = true; // Commencer le chargement
       fetch(`${BASE_URL}?view=${VIEW_NAME}`, {
