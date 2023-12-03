@@ -6,7 +6,7 @@
       <div
         v-for="item in items"
         :key="item.id"
-        class="flex flex-col items-center hover:bg-gray-100 transition-colors duration-200 p-5 rounded-lg w-64"
+        class="relative flex flex-col items-center hover:bg-gray-100 transition-colors duration-200 p-5 rounded-lg w-64"
       >
         <!-- Conteneur pour l'image et l'icône -->
         <div class="flex items-center">
@@ -25,7 +25,7 @@
           </div>
 
           <!-- Icône avec options -->
-          <div class="relative inline-block text-left ml-4">
+          <div class="absolute top-0 right-0 inline-block text-left ml-4">
             <div>
               <button
                 type="button"
