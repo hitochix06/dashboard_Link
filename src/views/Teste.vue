@@ -1,15 +1,17 @@
 <template>
   <!-- Affichage des raccourcis -->
   <div
-    class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
+    class="mx-auto max-w-xs px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
   >
-    <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
-      <div
+    <div class="mt-6 grid grid-cols-1 lg:grid-cols-4 gap-x-6 gap-y-10">
+      <a
         v-for="item in items"
         :key="item.id"
-        class="flex flex-col items-center"
+        :href="item.fields.Url"
+        target="_blank"
+        class="flex flex-col items-center hover:bg-gray-100 transition-colors duration-200 p-5 rounded-lg w-64"
       >
-        <div class="rounded-full w-24 h-24 overflow-hidden">
+        <div class="rounded-full w-16 h-16 overflow-hidden">
           <img
             v-if="item.fields.imageicon"
             :src="item.fields.imageicon"
@@ -23,20 +25,14 @@
           ></div>
         </div>
         <div>
-          <h1
-            class="text-lg text-black-900 m-5 text-center font-bold uppercase"
-          >
+          <h1 class="text-sm text-black-900 m-2 text-center font-bold uppercase">
             {{ item.fields.titre }}
           </h1>
-          <p class="mt-1 text-sm text-black-900 m-5 text-center">
-            {{ item.fields.Url }}
-          </p>
         </div>
-      </div>
+      </a>
     </div>
   </div>
 </template>
-
 <style scoped>
 /* Ajoutez ces styles pour rendre le cadre rond et petit */
 .rounded-md {
