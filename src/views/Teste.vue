@@ -16,12 +16,12 @@
             v-if="item.fields.imageicon"
             :src="item.fields.imageicon"
             alt="Icon"
-            class="object-contain w-full h-full rounded-full"
+            class="object-full w-full h-full rounded-full"
           />
           <div
             v-else
             :style="{ backgroundColor: getRandomColor() }"
-            class="object-contain w-full h-full rounded-full"
+            class="object-full w-full h-full rounded-full"
           ></div>
         </div>
         <div>
