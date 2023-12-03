@@ -14,16 +14,18 @@
             v-if="item.fields.imageicon"
             :src="item.fields.imageicon"
             alt="Icon"
-            class="object-cover w-full h-full"
+            class="object-cover w-full h-full rounded-full"
           />
           <div
             v-else
             :style="{ backgroundColor: getRandomColor() }"
-            class="object-cover w-full h-full"
+            class="object-cover w-full h-full rounded-full"
           ></div>
         </div>
         <div>
-          <h1 class="text-lg text-black-900 m-5 text-center">
+          <h1
+            class="text-lg text-black-900 m-5 text-center font-bold uppercase"
+          >
             {{ item.fields.titre }}
           </h1>
           <p class="mt-1 text-sm text-black-900 m-5 text-center">
