@@ -7,6 +7,8 @@
         v-for="item in items"
         :key="item.id"
         class="relative flex flex-col items-center hover:bg-gray-100 transition-colors duration-200 p-5 rounded-lg w-64"
+        @mouseover="hoveredItem = item.id"
+        @mouseleave="hoveredItem = null"
       >
         <!-- Conteneur pour l'image et l'icône -->
         <div class="flex items-center">
@@ -25,7 +27,10 @@
           </div>
 
           <!-- Icône avec options -->
-          <div class="absolute top-0 right-0 inline-block text-left ml-4">
+          <div
+            class="absolute top-0 right-0 inline-block text-left ml-4"
+            v-show="hoveredItem === item.id"
+          >
             <div>
               <button
                 type="button"
@@ -113,6 +118,7 @@ const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
 export default {
   data() {
     return {
+      hoveredItem: null,
       isOpen: false,
       items: [],
       titre: "",
