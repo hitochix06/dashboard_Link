@@ -4,45 +4,34 @@
     class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
   >
     <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
-      <div v-for="item in items" :key="item.id">
-        <div
-          class="aspect-h-1 aspect-w-1 w-full overflow-hidden lg:aspect-none lg:h-60 flex justify-center items-center"
-        >
-          <!-- Image du raccourci -->
-          <div
+      <div
+        v-for="item in items"
+        :key="item.id"
+        class="flex flex-col items-center"
+      >
+        <div class="rounded-full w-24 h-24 overflow-hidden">
+          <img
             v-if="item.fields.imageicon"
-            class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md lg:aspect-none lg:h-60 flex justify-center items-center"
-          >
-            <img
-              :src="item.fields.imageicon"
-              alt="Image"
-              class="object-cover object-center rounded-full"
-            />
-          </div>
+            :src="item.fields.imageicon"
+            alt="Icon"
+            class="object-cover w-full h-full"
+          />
           <div
             v-else
             :style="{ backgroundColor: getRandomColor() }"
-            class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md lg:aspect-none lg:h-60 flex justify-center items-center rounded-full"
+            class="object-cover w-full h-full"
           ></div>
         </div>
-        <div class="mt-4 flex justify-between">
-          <div>
-            <h1 class="text-lg text-black-900 m-5 text-center">
-              {{ item.fields.titre }}
-            </h1>
-            <p class="mt-1 text-sm text-black-900 m-5 text-center">
-              {{ item.fields.Url }}
-            </p>
-          </div>
+        <div>
+          <h1 class="text-lg text-black-900 m-5 text-center">
+            {{ item.fields.titre }}
+          </h1>
+          <p class="mt-1 text-sm text-black-900 m-5 text-center">
+            {{ item.fields.Url }}
+          </p>
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Message si aucune donnée n'est trouvée ou en cours de chargement -->
-  <div v-if="isLoading" class="text-center">Chargement des données...</div>
-  <div v-if="!isLoading && !items.length" class="text-center">
-    Aucun raccourci trouvé.
   </div>
 </template>
 
