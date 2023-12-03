@@ -4,18 +4,18 @@
       <h1 class="text-center">Liste</h1>
       <table class="table">
         <tbody>
-          <tr v-for="data in datas" :key="data.id">
-            <td>{{ data.fields.titre }}</td>
-            <td>{{ data.fields.Url }}</td>
+          <tr v-for="item in items" :key="item.id">
+            <td>{{ item.fields.titre }}</td>
+            <td>{{ item.fields.Url }}</td>
 
             <td>
               <button
                 class="btn btn-primary button-margin"
-                @click="handleUpdate(data)"
+                @click="handleUpdate(item)"
               >
                 Modifier
               </button>
-              <button class="btn btn-danger" @click="deleteContact(data.id)">
+              <button class="btn btn-danger" @click="deleteContact(item.id)">
                 Supprimer
               </button>
             </td>
@@ -34,7 +34,7 @@ const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 export default {
   data() {
     return {
-      datas: [],
+      items: [],
       titre: "",
       url: "",
       imageicon: "",
@@ -59,7 +59,7 @@ export default {
       )
         .then((response) => response.json())
         .then((data) => {
-          this.datas = data.records;
+          this.items = data.records;
         })
         .catch((error) => {
           console.log(error);

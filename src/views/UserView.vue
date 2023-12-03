@@ -450,6 +450,38 @@ export default {
       this.url = "";
     },
 
+    createContact() {
+      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          fields: {
+            titre: this.titre,
+            Url: this.url,
+            imageicon: this.imageicon,
+          },
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.showAlert = true; // Afficher l'alerte
+          this.isOpen = false;
+          this.handleResetForm();
+
+          // Faire disparaître l'alerte après 5 secondes
+          setTimeout(() => {
+            this.showAlert = false;
+          }, 3000);
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Une erreur est survenue");
+        });
+    },
+
     // Supprimer un racourci
     deleteContact(id) {
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
@@ -491,38 +523,6 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-        });
-    },
-
-    createContact() {
-      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`, {
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          fields: {
-            titre: this.titre,
-            Url: this.url,
-            imageicon: this.imageicon,
-          },
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          this.showAlert = true; // Afficher l'alerte
-          this.isOpen = false;
-          this.handleResetForm();
-
-          // Faire disparaître l'alerte après 5 secondes
-          setTimeout(() => {
-            this.showAlert = false;
-          }, 3000);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Une erreur est survenue");
         });
     },
   },
