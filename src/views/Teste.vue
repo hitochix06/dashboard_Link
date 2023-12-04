@@ -12,19 +12,21 @@
       >
         <!-- Conteneur pour l'image et l'icône -->
         <div class="flex items-center">
-          <div class="rounded-full w-16 h-16 overflow-hidden">
-            <img
-              v-if="item.fields.imageicon"
-              :src="item.fields.imageicon"
-              alt="Icon"
-              class="object-full w-full h-full rounded-full"
-            />
-            <div
-              v-else
-              :style="{ backgroundColor: getRandomColor() }"
-              class="object-full w-full h-full rounded-full"
-            ></div>
-          </div>
+          <a :href="item.fields.Url" target="_blank">
+            <div class="rounded-full w-16 h-16 overflow-hidden">
+              <img
+                v-if="item.fields.imageicon"
+                :src="item.fields.imageicon"
+                alt="Icon"
+                class="object-full w-full h-full rounded-full"
+              />
+              <div
+                v-else
+                :style="{ backgroundColor: getRandomColor() }"
+                class="object-full w-full h-full rounded-full"
+              ></div>
+            </div>
+          </a>
 
           <!-- Icône avec options -->
           <div
