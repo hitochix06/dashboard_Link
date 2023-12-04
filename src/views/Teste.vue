@@ -553,23 +553,29 @@ export default {
         method: "PATCH",
         body: JSON.stringify({
           fields: {
-            Titre: this.titre,
+            titre: this.titre,
             Url: this.url,
-            Imageicon: this.imageicon,
+            imageicon: this.imageicon,
           },
         }),
       })
         .then((response) => response.json())
         .then((data) => {
+          // Trouver l'élément dans le tableau 'items' et le mettre à jour
+          const item = this.items.find((item) => item.id === id);
+          if (item) {
+            item.fields.titre = this.titre;
+            item.fields.Url = this.url;
+            item.fields.imageicon = this.imageicon;
+          }
+
           this.isEditOpen = false;
           this.prepareForEdit();
-          this.getContacts();
         })
         .catch((error) => {
           console.log(error);
         });
     },
-
     prepareForEdit(id) {
       const item = this.items.find((item) => item.id === id);
       if (item) {
