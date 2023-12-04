@@ -422,34 +422,6 @@
       </div>
     </div>
   </transition>
-
-  <button @click="isBackgroundModalOpen = true">
-    Modifier le fond d'écran
-  </button>
-
-  <div
-    v-show="isBackgroundModalOpen"
-    class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-10"
-  >
-    <form
-      @submit.prevent="updateBackground"
-      class="w-full md:w-2/3 lg:w-2/5 p-6 bg-white rounded-md shadow-xl m-2 mt-2"
-    >
-      <div class="mt-2">
-        <label for="backgroundUrl">URL du fond d'écran</label>
-        <input
-          v-model="backgroundUrl"
-          type="url"
-          autocomplete="off"
-          class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
-          placeholder="URL du fond d'écran"
-          required
-        />
-      </div>
-      <button type="submit">Modifier</button>
-      <button @click="isBackgroundModalOpen = false">Annuler</button>
-    </form>
-  </div>
 </template>
 
 <style scoped>
@@ -477,10 +449,6 @@
   transform: translateX(10px);
   opacity: 0;
 }
-
-.fondimage {
-  background-image: url(this.fondimage);
-}
 </style>
 
 <script>
@@ -494,8 +462,6 @@ const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
 export default {
   data() {
     return {
-      backgroundUrl:
-        "https://www.geekzone.fr/wp-content/uploads/2016/02/Star-Citizen-Fan-Made-Wallpaper.jpg",
       open: [],
       items: [],
       hoveredItem: null,
@@ -508,8 +474,6 @@ export default {
       loadingMessage: false, // Ajout de l'état de chargement
       showAlert: false,
       deleteAlert: false,
-      isBackgroundModalOpen: false,
-      backgroundUrl: "",
     };
   },
   methods: {
@@ -658,18 +622,6 @@ export default {
         this.imageicon = item.fields.imageicon;
         this.selectedId = item.id;
       }
-    },
-    updateBackground() {
-      // Ici, vous pouvez ajouter le code pour mettre à jour l'URL de l'image de fond dans votre base de données
-      // Pour l'instant, nous allons simplement mettre à jour l'URL de l'image de fond dans l'état du composant
-      this.fondimage = this.backgroundUrl;
-      this.isBackgroundModalOpen = false;
-    },
-    watch: {
-      backgroundUrl(newUrl) {
-        document.body.style.backgroundImage = 'url("' + newUrl + '")';
-        console.log(newUrl);
-      },
     },
   },
 
