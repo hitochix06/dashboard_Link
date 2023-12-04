@@ -263,7 +263,33 @@
         />
       </svg>
       <div class="ms-3 text-sm font-medium">
-        Votre compte a été créé avec succès !
+        Votre raccourci a été créé avec succès !
+      </div>
+    </div>
+  </transition>
+
+  <!--message supprime un raccourci -->
+  <transition name="slide-fade">
+    <div
+      v-show="deleteAlert"
+      :class="{ 'alert-hide': !deleteAlert }"
+      id="alert-border-3"
+      class="fixed top-0 right-0 flex items-center p-5 mb-4 text-red-600 border-t-4 border-red-600 bg-green-50 dark:text-red-600 dark:bg-gray-800 dark:border-red-600"
+      role="alert"
+    >
+      <svg
+        class="flex-shrink-0 w-4 h-4"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+        />
+      </svg>
+      <div class="ms-3 text-sm font-medium">
+        Votre raccourci bien supprimer !
       </div>
     </div>
   </transition>
@@ -315,6 +341,7 @@ export default {
       imageicon: "",
       loadingMessage: false, // Ajout de l'état de chargement
       showAlert: false,
+      deleteAlert: false,
       open: [],
     };
   },
@@ -400,8 +427,13 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
+          this.deleteAlert = true;
           this.getContacts();
           this.open[id] = false;
+          // Faire disparaître l'alerte après 5 secondes
+          setTimeout(() => {
+            this.deleteAlert = false;
+          }, 3000);
         })
         .catch((error) => {
           console.log(error);
