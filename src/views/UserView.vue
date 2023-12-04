@@ -60,7 +60,7 @@
             <div>
               <button
                 type="button"
-                class="flex items-center justify-center w-12 h-12 rounded-full focus:outline-none hover:bg-gray-200 rounded-full"
+                class="flex items-center justify-center w-12 h-12 rounded-full focus:outline-none hover:bg-gray-200"
                 id="options-menu"
                 @click="toggleMenu(item.id)"
                 aria-haspopup="true"
@@ -473,6 +473,25 @@ export default {
     };
   },
   methods: {
+    getItems() {
+      this.loadingMessage = true; // Commencer le chargement
+
+      this.$nextTick()
+        .then(() => {
+          // Remplacer par votre logique de chargement de données
+          return fetch(`${BASE_URL}`);
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          this.items = data;
+          this.loadingMessage = false; // Fin du chargement
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          this.loadingMessage = false; // Fin du chargement même en cas d'erreur
+        });
+    },
+
     createContact() {
       fetch(`${BASE_URL}`, {
         headers: {
@@ -635,6 +654,7 @@ export default {
   },
 
   mounted() {
+    this.getItems();
     document.body.style.backgroundImage = `url(${this.backgroundUrl})`;
     this.loadingMessage = true;
     setTimeout(() => {
