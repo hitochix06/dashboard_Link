@@ -128,8 +128,59 @@
       </div>
     </div>
   </div>
+
+  <!--message alert -->
+  <transition name="slide-fade">
+    <div
+      v-show="showAlert"
+      :class="{ 'alert-hide': !showAlert }"
+      id="alert-border-3"
+      class="fixed top-0 right-0 flex items-center p-5 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800"
+      role="alert"
+    >
+      <svg
+        class="flex-shrink-0 w-4 h-4"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+        />
+      </svg>
+      <div class="ms-3 text-sm font-medium">
+        Votre compte a été créé avec succès !
+      </div>
+    </div>
+  </transition>
 </template>
-<style scoped></style>
+<style scoped>
+.fondimage {
+  background-image: url("../../assets/images/fondecran.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 50vh;
+}
+
+.lg\:py-16 {
+  padding-top: 1rem;
+  padding-bottom: 0rem;
+}
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+</style>
 
 <script>
 const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
@@ -154,24 +205,6 @@ export default {
     };
   },
   methods: {
-    getRandomColor() {
-      const letters = "0123456789ABCDEF";
-      let color = "#";
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    },
-
-    handleResetForm() {
-      this.titre = "";
-      this.imageicon = "";
-      this.url = "";
-    },
-    toggleMenu(id) {
-      this.open = { [id]: true };
-    },
-
     createContact() {
       fetch(`${BASE_URL}`, {
         headers: {
@@ -202,6 +235,24 @@ export default {
           console.log(error);
           alert("Une erreur est survenue");
         });
+    },
+
+    getRandomColor() {
+      const letters = "0123456789ABCDEF";
+      let color = "#";
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    },
+
+    handleResetForm() {
+      this.titre = "";
+      this.imageicon = "";
+      this.url = "";
+    },
+    toggleMenu(id) {
+      this.open = { [id]: true };
     },
 
     // Méthode pour ajouter un nouveau contact
