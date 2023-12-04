@@ -128,7 +128,19 @@
       </div>
     </div>
   </div>
+  <div
+    v-if="loadingMessage"
+    class="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 uppercase"
+  >
+    Chargement...
+  </div>
 
+  <div
+    v-if="!items.length && !loadingMessage"
+    class="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 uppercase"
+  >
+    Aucun élément trouvé.
+  </div>
   <!--message alert -->
   <transition name="slide-fade">
     <div
@@ -155,6 +167,7 @@
     </div>
   </transition>
 </template>
+
 <style scoped>
 .fondimage {
   background-image: url("../../assets/images/fondecran.png");
@@ -199,7 +212,7 @@ export default {
       titre: "",
       url: "",
       imageicon: "",
-      isLoading: false, // Ajout de l'état de chargement
+      loadingMessage: false, // Ajout de l'état de chargement
       showAlert: false,
       open: [],
     };
@@ -325,7 +338,11 @@ export default {
   },
 
   mounted() {
-    this.getContacts();
+    this.loadingMessage = true;
+    setTimeout(() => {
+      this.getContacts();
+      this.loadingMessage = false;
+    }, 2000);
   },
 };
 </script>
