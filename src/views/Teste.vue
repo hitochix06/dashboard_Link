@@ -151,7 +151,10 @@
               Ajouter un raccourci
             </h1>
             <svg
-              @click="isOpen = false"
+              @click="
+                isOpen = false;
+                handleResetForm();
+              "
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
@@ -245,7 +248,10 @@
               modifier un raccourci
             </h1>
             <svg
-              @click="isEditOpen = false"
+              @click="
+                isEditOpen = false;
+                handleResetForm();
+              "
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
@@ -309,7 +315,6 @@
             </div>
 
             <button
-              @click="handleResetForm"
               type="submit"
               class="ml-2 text-[#fff] bg-[#43B7BE] rounded hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
             >
