@@ -213,12 +213,7 @@
                 </div>
               </div>
             </div>
-            <button
-              @click="isOpen = false"
-              class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
-            >
-              Annuler
-            </button>
+
             <button
               type="submit"
               class="ml-2 text-[#fff] bg-[#43B7BE] rounded hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
@@ -312,13 +307,9 @@
                 </div>
               </div>
             </div>
+
             <button
-              @click="isEditOpen = false"
-              class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
-            >
-              Annuler
-            </button>
-            <button
+              @click="handleResetForm"
               type="submit"
               class="ml-2 text-[#fff] bg-[#43B7BE] rounded hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
             >
@@ -573,44 +564,57 @@ export default {
 
     // Méthode pour modifier un contact
     updateContact(id) {
-      fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
-        headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        method: "PATCH",
-        body: JSON.stringify({
-          fields: {
-            titre: this.titre,
-            Url: this.url,
-            imageicon: this.imageicon,
+      // Trouver l'élément dans le tableau 'items'
+      const item = this.items.find((item) => item.id === id);
+
+      // Vérifier si les valeurs du formulaire sont différentes des valeurs initiales
+      if (
+        item &&
+        (this.titre !== item.fields.titre ||
+          this.url !== item.fields.Url ||
+          this.imageicon !== item.fields.imageicon)
+      ) {
+        fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
+          headers: {
+            Authorization: `Bearer ${API_TOKEN}`,
+            "Content-Type": "application/json",
           },
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // Trouver l'élément dans le tableau 'items' et le mettre à jour
-          const item = this.items.find((item) => item.id === id);
-          if (item) {
-            item.fields.titre = this.titre;
-            item.fields.Url = this.url;
-            item.fields.imageicon = this.imageicon;
-          }
-
-          this.isEditOpen = false;
-          this.prepareForEdit();
-
-          // Afficher l'alerte de modification
-          this.editAlert = true;
-
-          // Faire disparaître l'alerte après 5 secondes
-          setTimeout(() => {
-            this.editAlert = false;
-          }, 5000);
+          method: "PATCH",
+          body: JSON.stringify({
+            fields: {
+              titre: this.titre,
+              Url: this.url,
+              imageicon: this.imageicon,
+            },
+          }),
         })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((response) => response.json())
+          .then((data) => {
+            // Mettre à jour l'élément dans le tableau 'items'
+            if (item) {
+              item.fields.titre = this.titre;
+              item.fields.Url = this.url;
+              item.fields.imageicon = this.imageicon;
+            }
+            this.prepareForEdit();
+            this.handleResetForm();
+            this.isEditOpen = false;
+
+            // Afficher l'alerte de modification
+            this.editAlert = true;
+
+            // Faire disparaître l'alerte après 5 secondes
+            setTimeout(() => {
+              this.editAlert = false;
+            }, 5000);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        // Si aucune modification n'a été faite, fermer le modal sans déclencher l'alerte
+        this.isEditOpen = false;
+      }
     },
 
     // Méthode pour préparer le formulaire de modification
