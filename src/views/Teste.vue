@@ -561,9 +561,8 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          this.isEdit = true;
-          this.handleResetForm();
-          this.edit = false;
+          this.isEditOpen = false;
+          this.prepareForEdit();
           this.getContacts();
         })
         .catch((error) => {
