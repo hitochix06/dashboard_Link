@@ -97,7 +97,10 @@
                   href="#"
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   role="menuitem"
-                  @click.prevent="updateContact(item.id)"
+                  @click.prevent="
+                    prepareForEdit(item.id);
+                    isEditOpen = true;
+                  "
                 >
                   Modifier le raccourci
                 </a>
@@ -134,7 +137,7 @@
     <div class="flex justify-center">
       <div
         v-show="isOpen"
-        class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
+        class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-10"
       >
         <form
           @submit.prevent="createContact"
@@ -228,6 +231,105 @@
     </div>
   </div>
 
+  <!-- modifier formulaire de modal  -->
+  <div class="container mx-auto">
+    <div class="flex justify-center">
+      <div
+        v-show="isEditOpen"
+        class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-10"
+      >
+        <form
+          @submit.prevent="updateContact(selectedId)"
+          class="w-full md:w-2/3 lg:w-2/5 p-6 bg-white rounded-md shadow-xl m-2 mt-2"
+        >
+          <div class="flex items-center justify-between">
+            <h1
+              class="text-2xl"
+              style="text-transform: uppercase; font-weight: 700"
+            >
+              modifier un raccourci
+            </h1>
+            <svg
+              @click="isEditOpen = false"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="w-6 h-6 "
+              width="30"
+              height="30"
+              style="cursor: pointer"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="mt-4">
+            <div class="mt-10 grid grid-cols-1 sm:grid-cols-6 py-2">
+              <div class="sm:col-span-5">
+                <div class="mt-2">
+                  <label
+                    for="titre"
+                    class="block text-sm font-medium leading-6 text-gray-900"
+                    >Titre</label
+                  >
+                  <input
+                    v-model="titre"
+                    type="text"
+                    autocomplete="given-name"
+                    class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
+                    placeholder="Nom"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="sm:col-span-5">
+                <div class="mt-2">
+                  <label for="Url">URL</label>
+                  <input
+                    v-model="url"
+                    type="Url"
+                    autocomplete="off"
+                    class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
+                    placeholder="Url"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="sm:col-span-5">
+                <div class="mt-2">
+                  <label for="imageicon">Lien image icon</label>
+                  <input
+                    v-model="imageicon"
+                    type="url"
+                    autocomplete="off"
+                    class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
+                    placeholder="Lien image icon"
+                  />
+                </div>
+              </div>
+            </div>
+            <button
+              @click="isEditOpen = false"
+              class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="ml-2 text-[#fff] bg-[#43B7BE] rounded hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
+            >
+              Modifier
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- creation texte chargement et si trouve pas élément-->
   <div
     v-if="loadingMessage"
@@ -238,7 +340,7 @@
 
   <div
     v-if="!items.length && !loadingMessage"
-    class="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 uppercase"
+    class="fixed top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 uppercase text-red-500"
   >
     Aucun élément trouvé.
   </div>
@@ -335,6 +437,7 @@ export default {
     return {
       hoveredItem: null,
       isOpen: false,
+      isEditOpen: false,
       items: [],
       titre: "",
       url: "",
@@ -439,6 +542,8 @@ export default {
           console.log(error);
         });
     },
+
+    // Méthode pour modifier un contact
     updateContact(id) {
       fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}/${id}`, {
         headers: {
@@ -456,6 +561,7 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
+          this.isEdit = true;
           this.handleResetForm();
           this.edit = false;
           this.getContacts();
@@ -464,12 +570,15 @@ export default {
           console.log(error);
         });
     },
-    handleUpdate(contact) {
-      this.titre = contact.fields.Titre;
-      this.url = contact.fields.Url;
-      this.imageicon = contact.fields.Imageicon;
-      this.selectedId = contact.id;
-      this.edit = true;
+
+    prepareForEdit(id) {
+      const item = this.items.find((item) => item.id === id);
+      if (item) {
+        this.titre = item.fields.titre;
+        this.url = item.fields.Url;
+        this.imageicon = item.fields.imageicon;
+        this.selectedId = item.id;
+      }
     },
   },
 
