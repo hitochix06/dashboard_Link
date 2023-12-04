@@ -344,6 +344,7 @@
   >
     Aucun élément trouvé.
   </div>
+
   <!--message alert -->
   <transition name="slide-fade">
     <div
@@ -395,6 +396,60 @@
       </div>
     </div>
   </transition>
+
+  <!--message modifier un raccourci -->
+  <transition name="slide-fade">
+    <div
+      v-show="editAlert"
+      :class="{ 'alert-hide': !editAlert }"
+      id="alert-border-3"
+      class="fixed top-0 right-0 flex items-center p-5 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800"
+      role="alert"
+    >
+      <svg
+        class="flex-shrink-0 w-4 h-4"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+        />
+      </svg>
+      <div class="ms-3 text-sm font-medium">
+        Votre raccourci a été modifié avec succès !
+      </div>
+    </div>
+  </transition>
+
+  <button @click="isBackgroundModalOpen = true">
+    Modifier le fond d'écran
+  </button>
+
+  <div
+    v-show="isBackgroundModalOpen"
+    class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-10"
+  >
+    <form
+      @submit.prevent="updateBackground"
+      class="w-full md:w-2/3 lg:w-2/5 p-6 bg-white rounded-md shadow-xl m-2 mt-2"
+    >
+      <div class="mt-2">
+        <label for="backgroundUrl">URL du fond d'écran</label>
+        <input
+          v-model="backgroundUrl"
+          type="url"
+          autocomplete="off"
+          class="min-w-full flex-auto rounded-md border-2 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 m-2"
+          placeholder="URL du fond d'écran"
+          required
+        />
+      </div>
+      <button type="submit">Modifier</button>
+      <button @click="isBackgroundModalOpen = false">Annuler</button>
+    </form>
+  </div>
 </template>
 
 <style scoped>
@@ -422,6 +477,10 @@
   transform: translateX(10px);
   opacity: 0;
 }
+
+.fondimage {
+  background-image: url(this.fondimage);
+}
 </style>
 
 <script>
@@ -435,17 +494,22 @@ const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
 export default {
   data() {
     return {
+      backgroundUrl:
+        "https://www.geekzone.fr/wp-content/uploads/2016/02/Star-Citizen-Fan-Made-Wallpaper.jpg",
+      open: [],
+      items: [],
       hoveredItem: null,
       isOpen: false,
       isEditOpen: false,
-      items: [],
+      editAlert: false,
       titre: "",
       url: "",
       imageicon: "",
       loadingMessage: false, // Ajout de l'état de chargement
       showAlert: false,
       deleteAlert: false,
-      open: [],
+      isBackgroundModalOpen: false,
+      backgroundUrl: "",
     };
   },
   methods: {
@@ -571,11 +635,21 @@ export default {
 
           this.isEditOpen = false;
           this.prepareForEdit();
+
+          // Afficher l'alerte de modification
+          this.editAlert = true;
+
+          // Faire disparaître l'alerte après 5 secondes
+          setTimeout(() => {
+            this.editAlert = false;
+          }, 5000);
         })
         .catch((error) => {
           console.log(error);
         });
     },
+
+    // Méthode pour préparer le formulaire de modification
     prepareForEdit(id) {
       const item = this.items.find((item) => item.id === id);
       if (item) {
@@ -585,9 +659,22 @@ export default {
         this.selectedId = item.id;
       }
     },
+    updateBackground() {
+      // Ici, vous pouvez ajouter le code pour mettre à jour l'URL de l'image de fond dans votre base de données
+      // Pour l'instant, nous allons simplement mettre à jour l'URL de l'image de fond dans l'état du composant
+      this.fondimage = this.backgroundUrl;
+      this.isBackgroundModalOpen = false;
+    },
+    watch: {
+      backgroundUrl(newUrl) {
+        document.body.style.backgroundImage = 'url("' + newUrl + '")';
+        console.log(newUrl);
+      },
+    },
   },
 
   mounted() {
+    document.body.style.backgroundImage = `url(${this.backgroundUrl})`;
     this.loadingMessage = true;
     setTimeout(() => {
       this.getContacts();

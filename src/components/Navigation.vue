@@ -54,7 +54,7 @@
 
       <!-- personnaliser icones inscription/connexion -->
 
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end text-white">
+      <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end text-white">
         <RouterLink
           v-if="!isUserLoggedIn"
           to="connexion"
@@ -103,7 +103,7 @@
             <span>{{ username }}</span>
           </RouterLink>
         </div>
-      </div>
+      </div> -->
     </nav>
 
     <Dialog
