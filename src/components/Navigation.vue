@@ -158,7 +158,7 @@
                   clipRule="evenodd"
                 />
               </svg>
-              Connexion/Inscription
+              Connexion/Inscriptions
             </RouterLink>
             <div
               v-else
