@@ -448,11 +448,10 @@
 </style>
 
 <script>
-const BASE_ID = "appHcgz06DExsXT5D";
+const BASE_ID = import.meta.env.NEXT_AIRTABLE_BASE_ID;
 const TABLE_NAME = "ajouterraccourci";
 const VIEW_NAME = "Grid view";
-const API_TOKEN =
-  "patxW6p2WhSK3Lna1.13193576d26339128db92686df5cdd61fac9f732e577f2a0ad0419c655dc6255";
+const API_TOKEN = import.meta.env.NEXT_AIRTABLE_TOKEN;
 
 const BASE_URL = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`;
 

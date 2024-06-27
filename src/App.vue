@@ -1,13 +1,11 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
-import Navigation from "./components/Navigation.vue";
+// import { RouterLink, RouterView } from "vue-router";
+// import Navigation from "./components/Navigation.vue";
 import Footer from "./components/Footer.vue";
 </script>
 
 <template>
-  <header>
-  
-  </header>
+  <header></header>
   <RouterView />
 
   <Footer />
