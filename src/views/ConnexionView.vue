@@ -82,9 +82,8 @@
                 <p
                   class="mt-6 flex items-baseline justify-center gap-x-2"
                   style="color: white"
-                >
-                  Venez, créé votre carte raccourcie
-                </p>
+                >Venez, créé votre carte raccourcie
+              </p>
                 <div class="mt-6 flex items-baseline justify-center gap-x-2">
                   <label for="email-address"></label>
                   <input
@@ -296,9 +295,9 @@ import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 
-const BASE_ID = import.meta.env.PUBLIC_VITE_APP_BASS_ID;
+const BASE_ID = import.meta.env.VITE_APP_BASS_ID;
 const TABLE_NAME = "Formulaire_inscription";
-const API_TOKEN = import.meta.env.PUBLIC_VITE_APP_TOKEN;
+const API_TOKEN = import.meta.env.VITE_APP_TOKEN;
 
 // Data
 const contacts = ref([]);
